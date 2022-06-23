@@ -8,4 +8,5 @@ test('creates a new intern object', () => {
     expect(intern.email).toBe('john@gmail.com');
     expect(intern.school).toBe('Vanderbilt University');
     expect(intern.role).toBe('Intern');
+
 });
