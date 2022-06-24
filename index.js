@@ -7,6 +7,7 @@ const inquirer = require('inquirer');
 const generatePage = require('./src/page-template');
 
 // sets an array for all team member objects
+const managerArr = [];
 const teamArr = [];
 
 // questions for all employees
@@ -104,42 +105,81 @@ const internQuestions =
     }
 ];
 
+const teamBuild = () => {
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'team',
+            message: 'What would you like to do?',
+            choices: ['Add Engineer', 'Add Intern', 'Done!'],
+        }
+    ])
+    .then( answer => {
+        if ( answer.team === 'Add Engineer') {
+            buildEngineer();
+        }
+        if ( answer.team === 'Add Intern') {
+            buildIntern();
+        }
+        if ( answer.team === 'Done!') {
+            console.log(managerArr);
+            console.log(teamArr);
+        }
+    })
+};
 // sets questions to build a manager object
 const buildManager = () => {
-    console.log('Please enter information for the Team Manager')
+    console.log(`
+    ============
+    Team Manager
+    ============`);
     return inquirer.prompt(employeeQuestions.concat(managerQuestions))
     .then(({name, id, email, officeNumber }) => {
         this.manager = new Manager(name, id, email, officeNumber);
-        console.log(this.manager);
-        teamArr.push(this.manager);
-    });
+        // console.log(this.manager);
+        managerArr.push(this.manager);
+    })
+    .then(teamBuild);
 };
 
 // sets questions to build engineer object
 const buildEngineer = () => {
+    console.log(`
+    ============
+    New Engineer
+    ============`);
     return inquirer.prompt(employeeQuestions.concat(engineerQuestions))
     .then(({name, id, email, github }) => {
         this.engineer = new Engineer(name, id, email, github);
-        console.log(this.engineer);
+        // console.log(this.engineer);
         teamArr.push(this.engineer);
     })
+    .then(teamBuild);
 };
 
 // Sets questions to build intern object
 const buildIntern = ()  => {
+    console.log(`
+    ==========
+    New Intern
+    ==========`);
     return inquirer.prompt(employeeQuestions.concat(internQuestions))
     .then(({name, id, email, school }) => {
         this.intern = new Intern(name, id, email, school);
-        console.log(this.intern);
+        // console.log(this.intern);
         teamArr.push(this.intern);
-        console.log(teamArr);
+        // console.log(teamArr);
     })
+    .then(teamBuild);
 };
 
-buildManager()
-    .then(buildEngineer)
-    .then(buildIntern)
-    ;
+const printTeam = () => {
+    console.log(managerArr);
+    console.log(teamArr);
+};
+
+buildManager();
+ 
 
 
     
