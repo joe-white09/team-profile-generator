@@ -116,31 +116,29 @@ const teamBuild = () => {
     .then( answer => {
         if ( answer.team === 'Add Engineer') {
             buildEngineer();
-        }
+        };
         if ( answer.team === 'Add Intern') {
             buildIntern();
-        }
+        };
         if ( answer.team === 'Done!') {
-            return generatePage(teamArr)
-            .then(pageHTML => {
-                return writeFile(pageHTML);
-              })
-              .then(writeFileResponse => {
-                console.log(writeFileResponse);
-                return copyFile();
-              })
-              .then(copyFileResponse => {
-                console.log(copyFileResponse);
-              })
-              .catch(err => {
-                console.log(err);
-              });
-        }        
+            let pageHTML = generatePage(teamArr);
+            return writeFile(pageHTML)
+            .then(writeFileResponse => {
+            console.log(writeFileResponse);
+            return copyFile();
+            })
+            .then(copyFileResponse => {
+            console.log(copyFileResponse);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+        };        
     });
        
 };
 // sets questions to build a manager object
-const buildManager = () => {
+const inititiateTeam = () => {
     console.log(`
     ============
     Team Manager
@@ -182,7 +180,8 @@ const buildIntern = ()  => {
     .then(teamBuild);
 };
 
-buildManager();
+
+inititiateTeam();
   
 
 
