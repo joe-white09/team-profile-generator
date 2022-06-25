@@ -7,7 +7,6 @@ const inquirer = require('inquirer');
 const generatePage = require('./src/page-template');
 
 // sets an array for all team member objects
-const managerArr = [];
 const teamArr = [];
 
 // questions for all employees
@@ -122,10 +121,23 @@ const teamBuild = () => {
             buildIntern();
         }
         if ( answer.team === 'Done!') {
-            console.log(managerArr);
-            console.log(teamArr);
-        }
-    })
+            return generatePage(teamArr)
+            .then(pageHTML => {
+                return writeFile(pageHTML);
+              })
+              .then(writeFileResponse => {
+                console.log(writeFileResponse);
+                return copyFile();
+              })
+              .then(copyFileResponse => {
+                console.log(copyFileResponse);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }        
+    });
+       
 };
 // sets questions to build a manager object
 const buildManager = () => {
@@ -136,8 +148,7 @@ const buildManager = () => {
     return inquirer.prompt(employeeQuestions.concat(managerQuestions))
     .then(({name, id, email, officeNumber }) => {
         this.manager = new Manager(name, id, email, officeNumber);
-        // console.log(this.manager);
-        managerArr.push(this.manager);
+        teamArr.push(this.manager);
     })
     .then(teamBuild);
 };
@@ -151,7 +162,6 @@ const buildEngineer = () => {
     return inquirer.prompt(employeeQuestions.concat(engineerQuestions))
     .then(({name, id, email, github }) => {
         this.engineer = new Engineer(name, id, email, github);
-        // console.log(this.engineer);
         teamArr.push(this.engineer);
     })
     .then(teamBuild);
@@ -166,19 +176,16 @@ const buildIntern = ()  => {
     return inquirer.prompt(employeeQuestions.concat(internQuestions))
     .then(({name, id, email, school }) => {
         this.intern = new Intern(name, id, email, school);
-        // console.log(this.intern);
         teamArr.push(this.intern);
-        // console.log(teamArr);
+
     })
     .then(teamBuild);
 };
 
-const printTeam = () => {
-    console.log(managerArr);
-    console.log(teamArr);
-};
-
 buildManager();
+  
+
+
  
 
 
